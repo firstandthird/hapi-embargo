@@ -3,8 +3,9 @@ const _ = require('lodash');
 const moment = require('moment');
 const defaultOptions = {
   // the date the embargo will be lifted:
-  embargoEnd: `${moment().local('PST').hours(1).minutes(0).seconds(0)}`, // default is 1 am PST
+  embargoEnd: `${moment().date()} 01:00:00 PST`,
   embargoResponse: 'Page Unavailable',
+  viewsOnly: true
   // routes with these tags could be included, leave bank to do all routes:
   // tags: []
 };
@@ -18,6 +19,15 @@ exports.register = (server, config, next) => {
   server.ext({
     type: 'onRequest',
     method: (request, reply) => {
+      // if bypass option matches then let them pass:
+      if (options.bypass && request.query.bypass === options.bypass) {
+        return reply.continue();
+      }
+      // if it's not a view then let them pass:
+      if (options.viewsOnly && !reply.render) {
+        return reply.continue();
+      }
+      // otherwise see if the embargo is expired
       const currentTime = moment();
       if (currentTime.diff(options.embargoEndTime) < 0) {
         return reply(options.embargoResponse);
