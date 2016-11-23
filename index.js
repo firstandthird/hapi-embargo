@@ -1,6 +1,5 @@
 'use strict';
 const defaults = require('lodash.defaults');
-const moment = require('moment-timezone');
 const defaultOptions = {
   // the date the embargo will be lifted:
   embargoEnd: null,
@@ -13,9 +12,9 @@ exports.register = (server, config, next) => {
   if (!options.embargoEnd) {
     return next('You must specify a time for the embargo to end by passing the embargoEnd parameter');
   }
-  options.embargoEndTime = moment(options.embargoEnd);
+  options.embargoEndTime = new Date(options.embargoEnd);
   // log time that the embargo will be lifted:
-  server.log(['hapi-embargo', 'info'], `Embargo will be lifted at ${options.embargoEndTime}, time is now ${moment().local()}`);
+  server.log(['hapi-embargo', 'info'], `Embargo will be lifted at ${options.embargoEndTime}, time is now ${new Date()}`);
   server.ext({
     type: 'onPreAuth',
     method: (request, reply) => {
@@ -36,8 +35,8 @@ exports.register = (server, config, next) => {
         return reply.continue();
       }
       // otherwise see if the embargo is expired
-      const currentTime = moment();
-      if (currentTime.diff(options.embargoEndTime) < 0) {
+      const currentTime = new Date();
+      if (currentTime.getTime() < options.embargoEndTime.getTime()) {
         return reply(options.embargoResponse);
       }
       return reply.continue();

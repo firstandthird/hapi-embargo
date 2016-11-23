@@ -184,3 +184,32 @@ lab.test('will allow a request if not marked as a view (static files, etc are re
     });
   });
 });
+lab.test('can read a specific date format', { timeout: 5000 }, (done) => {
+  server.register({
+    register: hapiEmbargo,
+    options: {
+      embargoEnd: '11/30/16 1:00 AM PST',
+      viewsOnly: false
+    },
+  }, (err) => {
+    code.expect(err).to.equal(undefined);
+    server.route({
+      path: '/',
+      method: 'GET',
+      config: {
+        tags: ['embargo']
+      },
+      handler: (request, reply) => {
+        reply('The embargo must have been lifted.');
+      }
+    });
+    server.inject({
+      url: '/',
+      method: 'GET'
+    }, (response) => {
+      code.expect(response.statusCode).to.equal(200);
+      code.expect(response.result).to.equal('Page Unavailable');
+      done();
+    });
+  });
+});
