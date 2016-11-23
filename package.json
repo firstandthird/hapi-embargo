@@ -1,10 +1,11 @@
 {
   "name": "hapi-embargo",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Hapi plugin to embargo a web site until a specific date",
   "main": "index.js",
   "scripts": {
-    "test": "lab -t 100 -e test"
+    "test": "lab -t 100 -e test",
+    "lint": "eslint ."
   },
   "repository": {
     "type": "git",
@@ -25,10 +26,13 @@
     "code": "^2.3.0",
     "eslint": "^3.4.0",
     "eslint-config-firstandthird": "^3.0.2",
-    "eslint-plugin-import": "^1.14.0",
+    "eslint-plugin-import": "^2.1.0",
     "handlebars": "^4.0.6",
     "hapi": "^14.2.0",
     "lab": "^11.0.1",
     "vision": "^4.1.0"
+  },
+  "eslintConfig": {
+    "extends": "firstandthird"
   }
 }

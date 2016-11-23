@@ -5,9 +5,7 @@ const defaultOptions = {
   // the date the embargo will be lifted:
   embargoEnd: null,
   embargoResponse: 'Page Unavailable',
-  viewsOnly: true
-  // routes with these tags could be included, and leave bank to do all routes:
-  // tags: []
+  tag: 'embargo'
 };
 
 exports.register = (server, config, next) => {
@@ -19,14 +17,22 @@ exports.register = (server, config, next) => {
   // log time that the embargo will be lifted:
   server.log(['hapi-embargo', 'info'], `Embargo will be lifted at ${options.embargoEndTime}, time is now ${moment().local()}`);
   server.ext({
-    type: 'onRequest',
+    type: 'onPreAuth',
     method: (request, reply) => {
       // if bypass option matches then let them pass:
       if (options.bypass && request.query.bypass === options.bypass) {
+        server.log(['hapi-embargo', 'info'], {
+          message: 'Embargo bypassed',
+          url: request.url.path,
+          routePath: request.route.path,
+          referrer: request.info.referrer,
+          ipAddress: request.info.remoteAddress,
+          userAgent: request.headers['user-agent']
+        });
         return reply.continue();
       }
-      // if it's not a view then let them pass:
-      if (options.viewsOnly && !reply.render) {
+
+      if (!request.route.settings.tags || request.route.settings.tags.indexOf(options.tag) === -1) {
         return reply.continue();
       }
       // otherwise see if the embargo is expired

@@ -34,14 +34,16 @@ lab.test('will embargo a request if made before the specified time', { timeout: 
   server.register({
     register: hapiEmbargo,
     options: {
-      embargoEnd: new Date(new Date().getTime() + 10000),
-      viewsOnly: false
+      embargoEnd: new Date(new Date().getTime() + 10000)
     },
   }, (err) => {
     code.expect(err).to.equal(undefined);
     server.route({
       path: '/',
       method: 'GET',
+      config: {
+        tags: ['embargo']
+      },
       handler: (request, reply) => {
         reply('The embargo must have been lifted.');
       }
@@ -60,13 +62,15 @@ lab.test('will allow a request if made after the specified time', { timeout: 500
   server.register({
     register: hapiEmbargo,
     options: {
-      embargoEnd: new Date(new Date().getTime() - 10000),
-      viewsOnly: false
+      embargoEnd: new Date(new Date().getTime() - 10000)
     },
   }, (err) => {
     code.expect(err).to.equal(undefined);
     server.route({
       path: '/',
+      config: {
+        tags: ['embargo']
+      },
       method: 'GET',
       handler: (request, reply) => {
         reply('The embargo must have been lifted.');
@@ -86,6 +90,9 @@ lab.test('will allow a request if the bypass option is matched by a query', { ti
   server.route({
     path: '/',
     method: 'GET',
+    config: {
+      tags: ['embargo']
+    },
     handler: (request, reply) => {
       reply('The embargo must have been lifted.');
     }
@@ -95,7 +102,6 @@ lab.test('will allow a request if the bypass option is matched by a query', { ti
       server.register({
         register: hapiEmbargo,
         options: {
-          viewsOnly: false,
           embargoEnd: new Date(new Date().getTime() + 10000),
           bypass: 'theKey'
         }
@@ -133,7 +139,6 @@ lab.test('will allow a request if not marked as a view (static files, etc are re
         register: hapiEmbargo,
         options: {
           embargoEnd: new Date(new Date().getTime() + 10000),
-          viewsOnly: true
         }
       }, done);
     }
