@@ -30,5 +30,8 @@
     "hapi": "^14.2.0",
     "lab": "^11.0.1",
     "vision": "^4.1.0"
+  },
+  "eslintConfig": {
+    "extends": "firstandthird"
   }
 }
