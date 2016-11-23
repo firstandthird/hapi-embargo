@@ -21,6 +21,15 @@ lab.afterEach((done) => {
     done();
   });
 });
+lab.test('will send an error if no embargoEnd is specified', (done) => {
+  server.register({
+    register: hapiEmbargo,
+    options: {},
+  }, (err) => {
+    code.expect(err).to.include('You must specify a time for the embargo to end');
+    done();
+  });
+});
 lab.test('will embargo a request if made before the specified time', { timeout: 5000 }, (done) => {
   server.register({
     register: hapiEmbargo,

@@ -17,8 +17,7 @@
   },
   "homepage": "https://github.com/firstandthird/hapi-embargo#readme",
   "dependencies": {
-    "lodash": "^4.15.0",
-    "logr": "^1.13.0",
+    "lodash.defaults": "^4.2.0",
     "moment-timezone": "^0.5.9"
   },
   "devDependencies": {
