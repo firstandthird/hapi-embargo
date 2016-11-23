@@ -26,7 +26,7 @@ lab.test('will send an error if no embargoEnd is specified', (done) => {
     register: hapiEmbargo,
     options: {},
   }, (err) => {
-    code.expect(err).to.include('You must specify a time for the embargo to end');
+    code.expect(err).to.include('must specify');
     done();
   });
 });
