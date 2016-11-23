@@ -1,6 +1,6 @@
 {
   "name": "hapi-embargo",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Hapi plugin to embargo a web site until a specific date",
   "main": "index.js",
   "scripts": {
