@@ -13,9 +13,9 @@ const defaultOptions = {
 exports.register = (server, config, next) => {
   const options = defaults(config, defaultOptions);
   if (!options.embargoEnd) {
-    return next('You must specify a time for the ebargo to end by passing the embargoEnd parameter');
+    return next('You must specify a time for the embargo to end by passing the embargoEnd parameter');
   }
-  options.embargoEndTime = moment(options.embargoEnd);
+  options.embargoEndTime = moment(new Date(options.embargoEnd));
   // log time that the embargo will be lifted:
   server.log(['hapi-embargo', 'info'], `Embargo will be lifted at ${options.embargoEndTime}, time is now ${moment().local()}`);
   server.ext({
