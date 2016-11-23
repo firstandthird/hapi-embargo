@@ -196,6 +196,9 @@ lab.test('can read a specific date format', { timeout: 5000 }, (done) => {
     server.route({
       path: '/',
       method: 'GET',
+      config: {
+        tags: ['embargo']
+      },
       handler: (request, reply) => {
         reply('The embargo must have been lifted.');
       }
