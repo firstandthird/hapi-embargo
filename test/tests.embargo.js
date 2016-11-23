@@ -21,7 +21,6 @@ lab.afterEach((done) => {
     done();
   });
 });
-
 lab.test('will embargo a request if made before the specified time', { timeout: 5000 }, (done) => {
   server.register({
     register: hapiEmbargo,
@@ -48,7 +47,33 @@ lab.test('will embargo a request if made before the specified time', { timeout: 
     });
   });
 });
-lab.test('will bypass if the bypass option is matched by a query', { timeout: 5000 }, (allDone) => {
+lab.test('will allow a request if made after the specified time', { timeout: 5000 }, (done) => {
+  server.register({
+    register: hapiEmbargo,
+    options: {
+      embargoEnd: new Date(new Date().getTime() - 10000),
+      viewsOnly: false
+    },
+  }, (err) => {
+    code.expect(err).to.equal(undefined);
+    server.route({
+      path: '/',
+      method: 'GET',
+      handler: (request, reply) => {
+        reply('The embargo must have been lifted.');
+      }
+    });
+    server.inject({
+      url: '/',
+      method: 'GET'
+    }, (response) => {
+      code.expect(response.statusCode).to.equal(200);
+      code.expect(response.result).to.equal('The embargo must have been lifted.');
+      done();
+    });
+  });
+});
+lab.test('will allow a request if the bypass option is matched by a query', { timeout: 5000 }, (allDone) => {
   server.route({
     path: '/',
     method: 'GET',
@@ -89,7 +114,7 @@ lab.test('will bypass if the bypass option is matched by a query', { timeout: 50
     }]
   }, allDone);
 });
-lab.test('will bypass if not marked as a view (static files, etc are returned)', { timeout: 5000 }, (allDone) => {
+lab.test('will allow a request if not marked as a view (static files, etc are returned)', { timeout: 5000 }, (allDone) => {
   async.auto({
     views: (done) => {
       server.register(require('vision'), done);
@@ -142,31 +167,6 @@ lab.test('will bypass if not marked as a view (static files, etc are returned)',
         code.expect(response2.result).to.not.equal('Embargo lifted.');
         return allDone();
       });
-    });
-  });
-});
-lab.test('will allow a request if made after the specified time', { timeout: 5000 }, (done) => {
-  server.register({
-    register: hapiEmbargo,
-    options: {
-      embargoEnd: new Date(new Date().getTime() - 10000)
-    },
-  }, (err) => {
-    code.expect(err).to.equal(undefined);
-    server.route({
-      path: '/',
-      method: 'GET',
-      handler: (request, reply) => {
-        reply('The embargo must have been lifted.');
-      }
-    });
-    server.inject({
-      url: '/',
-      method: 'GET'
-    }, (response) => {
-      code.expect(response.statusCode).to.equal(200);
-      code.expect(response.result).to.equal('The embargo must have been lifted.');
-      done();
     });
   });
 });

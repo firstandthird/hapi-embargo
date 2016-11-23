@@ -1,12 +1,12 @@
 'use strict';
 const _ = require('lodash');
-const moment = require('moment');
+const moment = require('moment-timezone');
 const defaultOptions = {
   // the date the embargo will be lifted:
   embargoEnd: `${moment().date()} 01:00:00 PST`,
   embargoResponse: 'Page Unavailable',
   viewsOnly: true
-  // routes with these tags could be included, leave bank to do all routes:
+  // routes with these tags could be included, and leave bank to do all routes:
   // tags: []
 };
 
@@ -15,7 +15,7 @@ exports.register = (server, config, next) => {
   const options = _.defaults(config, defaultOptions);
   options.embargoEndTime = moment(options.embargoEnd);
   // log time that the embargo will be lifted:
-  server.log(['hapi-embargo', 'info'], `Embargo will be lifted at ${options.embargoEnd}, time is now ${moment()}`);
+  server.log(['hapi-embargo', 'info'], `Embargo will be lifted at ${options.embargoEndTime}, time is now ${moment().local()}`);
   server.ext({
     type: 'onRequest',
     method: (request, reply) => {
