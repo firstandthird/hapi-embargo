@@ -1,0 +1,34 @@
+{
+  "name": "hapi-embargo",
+  "version": "1.0.0",
+  "description": "Hapi plugin to embargo a web site until a specific date",
+  "main": "index.js",
+  "scripts": {
+    "test": "lab -t 100 -e test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/firstandthird/hapi-embargo.git"
+  },
+  "author": "First+Third",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/firstandthird/hapi-embargo/issues"
+  },
+  "homepage": "https://github.com/firstandthird/hapi-embargo#readme",
+  "dependencies": {
+    "lodash.defaults": "^4.2.0",
+    "moment-timezone": "^0.5.9"
+  },
+  "devDependencies": {
+    "async": "^2.1.4",
+    "code": "^2.3.0",
+    "eslint": "^3.4.0",
+    "eslint-config-firstandthird": "^3.0.2",
+    "eslint-plugin-import": "^1.14.0",
+    "handlebars": "^4.0.6",
+    "hapi": "^14.2.0",
+    "lab": "^11.0.1",
+    "vision": "^4.1.0"
+  }
+}
