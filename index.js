@@ -60,9 +60,7 @@ exports.register = (server, config, next) => {
       }
     });
     next();
-
   });
-
 };
 
 exports.register.attributes = {
