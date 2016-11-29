@@ -18,7 +18,8 @@
   },
   "homepage": "https://github.com/firstandthird/hapi-embargo#readme",
   "dependencies": {
-    "lodash.defaults": "^4.2.0"
+    "lodash.defaults": "^4.2.0",
+    "lodash.get": "^4.4.2"
   },
   "devDependencies": {
     "async": "^2.1.4",
