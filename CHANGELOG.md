@@ -1,4 +1,10 @@
 
+0.4.0 / 2016-11-29
+==================
+
+  * eslint cleanup
+  * added ability to pull end time via a server method
+
 0.3.0 / 2016-11-29
 ==================
 
