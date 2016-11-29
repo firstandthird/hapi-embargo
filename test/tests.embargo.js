@@ -52,7 +52,7 @@ lab.test('will embargo a request if made before the specified time', { timeout: 
       url: '/',
       method: 'GET'
     }, (response) => {
-      code.expect(response.statusCode).to.equal(200);
+      code.expect(response.statusCode).to.equal(503);
       code.expect(response.result).to.equal('Page Unavailable');
       done();
     });
@@ -122,7 +122,7 @@ lab.test('will allow a request if the bypass option is matched by a query', { ti
         url: '/',
         method: 'GET'
       }, (response) => {
-        code.expect(response.statusCode).to.equal(200);
+        code.expect(response.statusCode).to.equal(503);
         code.expect(response.result).to.equal('Page Unavailable');
         done();
       });
@@ -207,7 +207,7 @@ lab.test('can read a specific date format', { timeout: 5000 }, (done) => {
       url: '/',
       method: 'GET'
     }, (response) => {
-      code.expect(response.statusCode).to.equal(200);
+      code.expect(response.statusCode).to.equal(503);
       code.expect(response.result).to.equal('Page Unavailable');
       done();
     });
