@@ -4,6 +4,7 @@ const defaultOptions = {
   // the date the embargo will be lifted:
   embargoEnd: null,
   embargoResponse: 'Page Unavailable',
+  embargoHttpCode: 503,
   tag: 'embargo'
 };
 
@@ -36,7 +37,7 @@ exports.register = (server, config, next) => {
       // otherwise see if the embargo is expired
       const currentTime = new Date();
       if (currentTime.getTime() < options.embargoEndTime.getTime()) {
-        return reply(options.embargoResponse).code(503);
+        return reply(options.embargoResponse).code(options.embargoHttpCode);
       }
       return reply.continue();
     }

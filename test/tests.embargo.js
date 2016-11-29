@@ -58,6 +58,36 @@ lab.test('will embargo a request if made before the specified time', { timeout: 
     });
   });
 });
+lab.test('will embargo a request if made before the specified time', { timeout: 5000 }, (done) => {
+  const embargoHttpCode = 404;
+  server.register({
+    register: hapiEmbargo,
+    options: {
+      embargoEnd: new Date(new Date().getTime() + 10000),
+      embargoHttpCode
+    },
+  }, (err) => {
+    code.expect(err).to.equal(undefined);
+    server.route({
+      path: '/',
+      method: 'GET',
+      config: {
+        tags: ['embargo']
+      },
+      handler: (request, reply) => {
+        reply('The embargo must have been lifted.');
+      }
+    });
+    server.inject({
+      url: '/',
+      method: 'GET'
+    }, (response) => {
+      code.expect(response.statusCode).to.equal(embargoHttpCode);
+      code.expect(response.result).to.equal('Page Unavailable');
+      done();
+    });
+  });
+});
 lab.test('will allow a request if made after the specified time', { timeout: 5000 }, (done) => {
   server.register({
     register: hapiEmbargo,
