@@ -22,7 +22,7 @@
     "lodash.get": "^4.4.2"
   },
   "devDependencies": {
-    "async": "^2.1.4",
+    "async": "2.1.4",
     "code": "^4.0.0",
     "eslint": "^3.4.0",
     "eslint-config-firstandthird": "^3.0.2",
